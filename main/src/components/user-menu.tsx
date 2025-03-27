@@ -81,39 +81,47 @@ export default function UserMenu({
 	}
 
 	return (
-		<DropdownMenu modal={false} open={open} onOpenChange={setOpen}>
-			<DropdownMenuTrigger asChild>
-				<Button variant='ghost' size='icon' className='rounded-full'>
-					<Avatar className='h-8 w-8'>
-						<AvatarImage src='' alt='User' />
-						<AvatarFallback className='bg-primary text-primary-foreground'>
-							{currentUser?.username.charAt(0).toUpperCase()}
-						</AvatarFallback>
-					</Avatar>
+		<>
+			{currentUser ? (
+				<DropdownMenu modal={false} open={open} onOpenChange={setOpen}>
+					<DropdownMenuTrigger asChild>
+						<Button variant='ghost' size='icon' className='rounded-full'>
+							<Avatar className='h-8 w-8'>
+								<AvatarImage src='' alt='User' />
+								<AvatarFallback className='bg-primary text-primary-foreground'>
+									{currentUser?.username.charAt(0).toUpperCase()}
+								</AvatarFallback>
+							</Avatar>
+						</Button>
+					</DropdownMenuTrigger>
+					<DropdownMenuContent align='end' className='w-56 mt-1' sideOffset={6}>
+						<DropdownMenuLabel>Hesabım</DropdownMenuLabel>
+						<DropdownMenuLabel>
+							<span className='text-xs font-medium'>{currentUser?.email}</span>
+						</DropdownMenuLabel>
+						<DropdownMenuSeparator />
+						<DropdownMenuItem asChild className='cursor-pointer'>
+							<Link href='/orders' className='flex w-full'>
+								<ShoppingCart className='mr-2 h-4 w-4' />
+								<span>Siparişlerim</span>
+							</Link>
+						</DropdownMenuItem>
+						<DropdownMenuSeparator />
+						<DropdownMenuItem
+							onClick={() => signOut()}
+							disabled={signOutStatus === "executing"}
+							className='text-destructive cursor-pointer'
+						>
+							<LogOut className='mr-2 h-4 w-4' />
+							<span>Çıkış Yap</span>
+						</DropdownMenuItem>
+					</DropdownMenuContent>
+				</DropdownMenu>
+			) : (
+				<Button asChild variant='default'>
+					<Link href='/sign-in'>Giriş Yap</Link>
 				</Button>
-			</DropdownMenuTrigger>
-			<DropdownMenuContent align='end' className='w-56 mt-1' sideOffset={6}>
-				<DropdownMenuLabel>Hesabım</DropdownMenuLabel>
-				<DropdownMenuLabel>
-					<span className='text-xs font-medium'>{currentUser?.email}</span>
-				</DropdownMenuLabel>
-				<DropdownMenuSeparator />
-				<DropdownMenuItem asChild className='cursor-pointer'>
-					<Link href='/orders' className='flex w-full'>
-						<ShoppingCart className='mr-2 h-4 w-4' />
-						<span>Siparişlerim</span>
-					</Link>
-				</DropdownMenuItem>
-				<DropdownMenuSeparator />
-				<DropdownMenuItem
-					onClick={() => signOut()}
-					disabled={signOutStatus === "executing"}
-					className='text-destructive cursor-pointer'
-				>
-					<LogOut className='mr-2 h-4 w-4' />
-					<span>Çıkış Yap</span>
-				</DropdownMenuItem>
-			</DropdownMenuContent>
-		</DropdownMenu>
+			)}
+		</>
 	);
 }

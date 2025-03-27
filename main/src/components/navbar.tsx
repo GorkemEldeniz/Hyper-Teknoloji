@@ -59,10 +59,17 @@ export default function Navbar() {
 		},
 	});
 
+	const isActiveTab = (path: string) => {
+		if (path === "/") {
+			return pathname === "/";
+		}
+		return pathname.startsWith(path);
+	};
+
 	// Navigation links array for consistent rendering
 	const navLinks = [
+		{ href: "/", label: "Anasayfa" },
 		{ href: "/products", label: "Ürünler" },
-		{ href: "/categories", label: "Kategoriler" },
 		{ href: "/about", label: "Hakkımızda" },
 	];
 
@@ -99,10 +106,7 @@ export default function Navbar() {
 								<Link
 									key={link.href}
 									href={link.href}
-									className={cn(
-										"nav-link",
-										pathname.startsWith(link.href) && "active"
-									)}
+									className={cn("nav-link", isActiveTab(link.href) && "active")}
 								>
 									{link.label}
 								</Link>
