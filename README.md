@@ -122,7 +122,15 @@ yarn install
 pnpm install
 ```
 
-3. Geliştirme sunucusunu başlatın:
+3. Environment Değişkenlerini Oluşturun:
+
+Projenin ana dizininde `.env` dosyası oluşturun ve aşağıdaki değişkenleri ekleyin:
+
+````bash
+# JWT secret key oluştur
+JWT_SECRET=your_secret_key
+
+4. Geliştirme sunucusunu başlatın:
 
 ```bash
 npm run dev
@@ -130,9 +138,9 @@ npm run dev
 yarn dev
 # veya
 pnpm dev
-```
+````
 
-4. Test için kullanabileceğiniz özellikler:
+5. Test için kullanabileceğiniz özellikler:
    - Ürün listeleme ve filtreleme
    - Sepete ürün ekleme/çıkarma
    - Ödeme formu validasyonları
