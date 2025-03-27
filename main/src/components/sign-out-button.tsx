@@ -5,23 +5,22 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
-import { useRouter } from "next/navigation";
 
 export default function SignOutButton() {
-	const router = useRouter();
-
 	const { toast } = useToast();
 
 	const { execute: signOut, status: signOutStatus } = useAction(signOutAction, {
 		onSuccess: () => {
 			toast({
+				variant: "success",
 				title: "Başarılı",
 				description: "Çıkış yapıldı",
 			});
-			router.push("/sign-in");
+			localStorage.removeItem("cart");
 		},
 		onError: ({ error }) => {
 			toast({
+				variant: "destructive",
 				title: "Hata",
 				description: error?.serverError || "Çıkış yapılırken bir hata oluştu",
 			});

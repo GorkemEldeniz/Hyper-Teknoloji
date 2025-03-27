@@ -45,12 +45,14 @@ export default function AuthForm({ type }: AuthFormProps) {
 		onSuccess: ({ data }) => {
 			if (data?.success) {
 				toast({
+					variant: "success",
 					title: "Başarılı",
 					description: "Giriş yapıldı",
 				});
 				router.push("/products");
 			} else {
 				toast({
+					variant: "warning",
 					title: "Hata",
 					description: data?.error || "Giriş yapılırken bir hata oluştu",
 				});
@@ -58,6 +60,7 @@ export default function AuthForm({ type }: AuthFormProps) {
 		},
 		onError: ({ error }) => {
 			toast({
+				variant: "destructive",
 				title: "Hata",
 				description: error?.serverError || "Giriş yapılırken bir hata oluştu",
 			});
@@ -68,12 +71,14 @@ export default function AuthForm({ type }: AuthFormProps) {
 		onSuccess: ({ data }) => {
 			if (data?.success) {
 				toast({
+					variant: "success",
 					title: "Başarılı",
 					description: "Giriş yapıldı",
 				});
 				router.push("/products");
 			} else {
 				toast({
+					variant: "warning",
 					title: "Hata",
 					description: data?.error || "Giriş yapılırken bir hata oluştu",
 				});
@@ -81,6 +86,7 @@ export default function AuthForm({ type }: AuthFormProps) {
 		},
 		onError: ({ error }) => {
 			toast({
+				variant: "destructive",
 				title: "Hata",
 				description: error?.serverError || "Giriş yapılırken bir hata oluştu",
 			});

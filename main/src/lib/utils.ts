@@ -22,3 +22,17 @@ export async function Promisefy<T>(fn: () => T, delay = 1000) {
 		}, delay);
 	});
 }
+
+export function formatPriceToTurkish(price: number) {
+	return new Intl.NumberFormat("tr-TR", {
+		style: "currency",
+		currency: "TRY",
+	}).format(price);
+}
+
+export const turkishCategoryMap = {
+	electronics: "Elektronik",
+	jewelery: "Takı",
+	"men's clothing": "Erkek Giyim",
+	"women's clothing": "Kadın Giyim",
+};

@@ -2,7 +2,7 @@
 
 import { signInSchema, signUpSchema } from "@/lib/zod/auth";
 import fs from "fs";
-import { SignJWT } from "jose";
+import { SignJWT, jwtVerify } from "jose";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import path from "path";
@@ -22,7 +22,7 @@ const signInAction = actionClient
 		users = JSON.parse(fileContent);
 
 		const user = await Promisefy(() =>
-			users.find((user: any) => user.email === email)
+			users.find((user: { email: string }) => user.email === email)
 		);
 
 		if (!user) {
@@ -66,7 +66,7 @@ const signUpAction = actionClient
 		const users = JSON.parse(fileContent);
 
 		const user = await Promisefy(() =>
-			users.find((user: any) => user.email === email)
+			users.find((user: { email: string }) => user.email === email)
 		);
 
 		if (user) {
@@ -134,4 +134,38 @@ const signOutAction = actionClient.action(async () => {
 	}
 });
 
-export { signInAction, signOutAction, signUpAction };
+const getCurrentUserAction = actionClient.action(async () => {
+	try {
+		const cookieStore = await cookies();
+		const token = cookieStore.get("token");
+
+		if (!token) {
+			return { success: false, error: "Token bulunamadı" };
+		}
+
+		const { payload } = await jwtVerify(
+			token.value,
+			new TextEncoder().encode(process.env.JWT_SECRET)
+		);
+
+		if (!payload) {
+			return { success: false, error: "Token geçersiz" };
+		}
+
+		const users = fs.readFileSync(USER_FILE_PATH, "utf8");
+		const user = JSON.parse(users).find(
+			(user: { id: number }) => user.id === payload.id
+		);
+
+		if (!user) {
+			return { success: false, error: "Kullanıcı bulunamadı" };
+		}
+
+		return { success: true, data: user };
+	} catch (error) {
+		console.error("Get current user error:", error);
+		return { success: false, error: "Kullanıcı alınamadı" };
+	}
+});
+
+export { getCurrentUserAction, signInAction, signOutAction, signUpAction };

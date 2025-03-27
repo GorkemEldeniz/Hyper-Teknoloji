@@ -73,6 +73,39 @@
 	body {
 		font-family: Arial, Helvetica, sans-serif;
 	}
+
+	/* Navigation link styles */
+	.nav-link {
+		@apply relative px-4 py-2 rounded-md text-sm font-medium;
+	}
+
+	.nav-link.active {
+		@apply bg-primary/10 text-primary;
+	}
+
+	.nav-link:hover {
+		@apply bg-accent text-accent-foreground;
+	}
+
+	/* Mobile nav styles */
+	.mobile-nav-link {
+		@apply block w-full py-3 px-4 transition-colors;
+	}
+
+	.mobile-nav-link.active {
+		@apply text-primary font-medium border-l-2 border-primary pl-3;
+	}
+
+	/* Basic transitions */
+	button,
+	a {
+		@apply transition-colors duration-200;
+	}
+
+	/* Improved focus styles for accessibility */
+	*:focus-visible {
+		@apply outline-primary outline-offset-2;
+	}
 }
 
 @layer base {

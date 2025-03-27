@@ -1,10 +1,20 @@
-import SignOutButton from "@/components/sign-out-button";
+import { getProductsByCategories } from "@/actions/product";
+import ProductsContainer from "@/components/products/container";
 
-export default function ProductsPage() {
+export default async function ProductsPage({
+	searchParams,
+}: {
+	searchParams: Promise<{ categories: string; search: string }>;
+}) {
+	const { categories, search } = await searchParams;
+
+	const categoriesArray = categories ? categories.split(",") : [];
+
+	const products = await getProductsByCategories(categoriesArray, search);
+
 	return (
 		<div className='container mx-auto'>
-			<h1 className='text-2xl font-bold'>Products</h1>
-			<SignOutButton />
+			<ProductsContainer products={products} />
 		</div>
 	);
 }
