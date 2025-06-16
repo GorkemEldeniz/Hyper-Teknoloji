@@ -1,26 +1,20 @@
 [
-  {
-    "id": 1,
-    "username": "John Doe",
-    "email": "john@doe.com",
-    "password": "password"
-  },
-  {
-    "id": 2,
-    "username": "Jane Doe",
-    "email": "jane@doe.com",
-    "password": "password"
-  },
-  {
-    "id": 3,
-    "username": "John Smith",
-    "email": "john@smith.com",
-    "password": "password"
-  },
-  {
-    "id": 4,
-    "email": "gorkemeldeniz30@gmail.com",
-    "password": "sample123",
-    "username": "Görkem"
-  }
+	{
+		"id": 1,
+		"username": "John Doe",
+		"email": "john@doe.com",
+		"password": "password"
+	},
+	{
+		"id": 2,
+		"username": "Jane Doe",
+		"email": "jane@doe.com",
+		"password": "password"
+	},
+	{
+		"id": 3,
+		"username": "John Smith",
+		"email": "john@smith.com",
+		"password": "password"
+	}
 ]
