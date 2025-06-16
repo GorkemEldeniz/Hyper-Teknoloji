@@ -1,3 +1,5 @@
+"use client";
+
 import { getCurrentUserAction, signOutAction } from "@/actions/auth";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -10,12 +12,16 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/hooks/use-toast";
-import type { User } from "@/types/user";
 import { Loader2, LogOut, ShoppingCart } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+
+type CurrentUser = {
+	name: string;
+	email: string;
+};
 
 export default function UserMenu({
 	open,
@@ -24,9 +30,7 @@ export default function UserMenu({
 	open: boolean;
 	setOpen: (open: boolean) => void;
 }) {
-	const [currentUser, setCurrentUser] = useState<Omit<User, "password"> | null>(
-		null
-	);
+	const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
 
 	const { toast } = useToast();
 	const router = useRouter();
@@ -59,7 +63,7 @@ export default function UserMenu({
 				if (!data?.success) {
 					console.error("Error getting current user", data?.error);
 				} else {
-					setCurrentUser(data.data);
+					setCurrentUser(data.data as unknown as CurrentUser);
 				}
 			},
 			onError: ({ error }) => {
@@ -89,7 +93,7 @@ export default function UserMenu({
 							<Avatar className='h-8 w-8'>
 								<AvatarImage src='' alt='User' />
 								<AvatarFallback className='bg-primary text-primary-foreground'>
-									{currentUser?.username.charAt(0).toUpperCase()}
+									{currentUser?.name.charAt(0).toUpperCase()}
 								</AvatarFallback>
 							</Avatar>
 						</Button>

@@ -1,25 +1,20 @@
 "use server";
 
 import { signInSchema, signUpSchema } from "@/lib/zod/auth";
-import fs from "fs";
+import users from "@/mock/user.json";
 import { SignJWT, jwtVerify } from "jose";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
-import path from "path";
 import { actionClient } from "../lib/safe-action";
 import { Promisefy, tryCatch } from "../lib/utils";
 
 // Kullanıcı dosyası için doğru yol tanımı
-const USER_FILE_PATH = path.join(process.cwd(), "src/mock/user.json");
+// const USER_FILE_PATH = path.join(process.cwd(), "src/mock/user.json");
 
 const signInAction = actionClient
 	.schema(signInSchema)
 	.action(async ({ parsedInput: { email, password } }) => {
 		// TODO: Get user from database
-
-		let users = [];
-		const fileContent = fs.readFileSync(USER_FILE_PATH, "utf8");
-		users = JSON.parse(fileContent);
 
 		const user = await Promisefy(() =>
 			users.find((user: { email: string }) => user.email === email)
@@ -35,7 +30,7 @@ const signInAction = actionClient
 
 		// expires in 1 hour
 		const token = await tryCatch(() =>
-			new SignJWT({ id: user.id })
+			new SignJWT({ name: user.username, email: user.email })
 				.setProtectedHeader({ alg: "HS256" })
 				.setExpirationTime("1h")
 				.sign(new TextEncoder().encode(process.env.JWT_SECRET))
@@ -59,9 +54,10 @@ const signInAction = actionClient
 
 const signUpAction = actionClient
 	.schema(signUpSchema)
-	.action(async ({ parsedInput: { email, password, username } }) => {
+	.action(async ({ parsedInput: { email, username } }) => {
 		// TODO: Create user in database
 
+		/* DEVELOPMENT ONLY 
 		const fileContent = fs.readFileSync(USER_FILE_PATH, "utf8");
 		const users = JSON.parse(fileContent);
 
@@ -95,9 +91,10 @@ const signUpAction = actionClient
 			console.error("User file write error:", error);
 			return { success: false, error: "Kullanıcı kaydedilemedi" };
 		}
+		*/
 
 		const token = await tryCatch(() =>
-			new SignJWT({ id: newUser.id })
+			new SignJWT({ name: username, email: email })
 				.setProtectedHeader({ alg: "HS256" })
 				.setExpirationTime("1h")
 				.sign(new TextEncoder().encode(process.env.JWT_SECRET))
@@ -152,6 +149,7 @@ const getCurrentUserAction = actionClient.action(async () => {
 			return { success: false, error: "Token geçersiz" };
 		}
 
+		/* DEVELOPMENT ONLY 
 		const users = fs.readFileSync(USER_FILE_PATH, "utf8");
 		const user = JSON.parse(users).find(
 			(user: { id: number }) => user.id === payload.id
@@ -160,8 +158,12 @@ const getCurrentUserAction = actionClient.action(async () => {
 		if (!user) {
 			return { success: false, error: "Kullanıcı bulunamadı" };
 		}
+		*/
 
-		return { success: true, data: user };
+		return {
+			success: true,
+			data: { name: payload.name, email: payload.email },
+		};
 	} catch (error) {
 		console.error("Get current user error:", error);
 		return { success: false, error: "Kullanıcı alınamadı" };

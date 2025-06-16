@@ -23,7 +23,7 @@ export async function middleware(request: NextRequest) {
 				new TextEncoder().encode(process.env.JWT_SECRET)
 			);
 
-			if (!payload) {
+			if (!payload || Object.keys(payload).length === 0) {
 				return NextResponse.redirect(new URL("/sign-in", request.url));
 			}
 		} catch (error) {
